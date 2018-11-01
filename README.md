@@ -1,25 +1,25 @@
-# ☀️  pyopenuv: A simple Python API for data from openuv.io
+# 🤒 pyflunearyou: A Python3 API for Flu Near You
 
-[![Travis CI](https://travis-ci.org/bachya/pyopenuv.svg?branch=master)](https://travis-ci.org/bachya/pyopenuv)
-[![PyPi](https://img.shields.io/pypi/v/pyopenuv.svg)](https://pypi.python.org/pypi/pyopenuv)
-[![Version](https://img.shields.io/pypi/pyversions/pyopenuv.svg)](https://pypi.python.org/pypi/pyopenuv)
-[![License](https://img.shields.io/pypi/l/pyopenuv.svg)](https://github.com/bachya/pyopenuv/blob/master/LICENSE)
-[![Code Coverage](https://codecov.io/gh/bachya/pyopenuv/branch/master/graph/badge.svg)](https://codecov.io/gh/bachya/pyopenuv)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a03c9e96f19a3dc37f98/maintainability)](https://codeclimate.com/github/bachya/pyopenuv/maintainability)
+[![Travis CI](https://travis-ci.org/bachya/pyflunearyou.svg?branch=master)](https://travis-ci.org/bachya/pyflunearyou)
+[![PyPi](https://img.shields.io/pypi/v/pyflunearyou.svg)](https://pypi.python.org/pypi/pyflunearyou)
+[![Version](https://img.shields.io/pypi/pyversions/pyflunearyou.svg)](https://pypi.python.org/pypi/pyflunearyou)
+[![License](https://img.shields.io/pypi/l/pyflunearyou.svg)](https://github.com/bachya/pyflunearyou/blob/master/LICENSE)
+[![Code Coverage](https://codecov.io/gh/bachya/pyflunearyou/branch/master/graph/badge.svg)](https://codecov.io/gh/bachya/pyflunearyou)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a03c9e96f19a3dc37f98/maintainability)](https://codeclimate.com/github/bachya/pyflunearyou/maintainability)
 [![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
 
-`pyopenuv` is a simple Python library for retrieving UV-related information from
+`pyflunearyou` is a simple Python library for retrieving UV-related information from
 [openuv.io](https://openuv.io/).
 
 # Installation
 
 ```python
-pip install pyopenuv
+pip install pyflunearyou
 ```
 
 # Python Versions
 
-`pyopenuv` is currently supported on:
+`pyflunearyou` is currently supported on:
 
 * Python 3.5
 * Python 3.6
@@ -30,12 +30,9 @@ run on Python 3.5 will fail.
 
 # API Key
 
-You can get an API key from
-[the OpenUV console](https://www.openuv.io/console).
-
 # Usage
 
-`pyopenuv` starts within an
+`pyflunearyou` starts within an
 [aiohttp](https://aiohttp.readthedocs.io/en/stable/) `ClientSession`:
 
 ```python
@@ -43,7 +40,7 @@ import asyncio
 
 from aiohttp import ClientSession
 
-from pyopenuv import Client
+from pyflunearyou import Client
 
 
 async def main() -> None:
@@ -55,45 +52,41 @@ async def main() -> None:
 asyncio.get_event_loop().run_until_complete(main())
 ```
 
-Create a client, initialize it, then get to it:
+Create a client and get to work:
 
 ```python
 import asyncio
 
 from aiohttp import ClientSession
 
-from pyopenuv import Client
+from pyflunearyou import create_client
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     async with ClientSession() as websession:
-      client = pyopenuv.Client(
-        "<OPENUV.IO API KEY>",
-        "<LATITUDE>",
-        "<LONGITUDE>",
-        websession,
-        altitude="<ALTITUDE>")
+      client = await create_client(<LATITUDE>, <LONGITUDE>, websession)
 
-      # Get current UV index information:
-      await client.uv_index()
+      # Get user data for the client's latitude/longitude:
+      print(await client.user_reports.status())
 
-      # Get forecasted UV information:
-      await client.uv_forecast()
+      # Get user data for the a specific ZIP code:
+      print(await client.user_reports.status_by_zip("90046"))
 
-      # Get information on the window of time during which SPF protection
-      # should be used:
-      await client.uv_protection_window()
+      # Get CDC data for the client's latitude/longitude:
+      print(await client.cdc_reports.status())
 
+      # Get CDC data for North Dakota
+      print(await client.cdc_reports.status_by_state('North Dakota'))
 
 asyncio.get_event_loop().run_until_complete(main())
 ```
 
 # Contributing
 
-1. [Check for open features/bugs](https://github.com/bachya/pyopenuv/issues)
-  or [initiate a discussion on one](https://github.com/bachya/pyopenuv/issues/new).
-2. [Fork the repository](https://github.com/bachya/pyopenuv/fork).
+1. [Check for open features/bugs](https://github.com/bachya/pyflunearyou/issues)
+  or [initiate a discussion on one](https://github.com/bachya/pyflunearyou/issues/new).
+2. [Fork the repository](https://github.com/bachya/pyflunearyou/fork).
 3. Install the dev environment: `make init`.
 4. Enter the virtual environment: `pipenv shell`
 5. Code your new feature or bug fix.
