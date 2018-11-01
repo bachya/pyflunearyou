@@ -68,16 +68,16 @@ async def main() -> None:
       client = await create_client(<LATITUDE>, <LONGITUDE>, websession)
 
       # Get user data for the client's latitude/longitude:
-      print(await client.user_reports.status())
+      await client.user_reports.status()
 
       # Get user data for the a specific ZIP code:
-      print(await client.user_reports.status_by_zip("90046"))
+      await client.user_reports.status_by_zip("90046")
 
       # Get CDC data for the client's latitude/longitude:
-      print(await client.cdc_reports.status())
+      await client.cdc_reports.status()
 
       # Get CDC data for North Dakota
-      print(await client.cdc_reports.status_by_state('North Dakota'))
+      await client.cdc_reports.status_by_state('North Dakota')
 
 asyncio.get_event_loop().run_until_complete(main())
 ```
