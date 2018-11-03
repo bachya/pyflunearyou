@@ -30,8 +30,8 @@ async def test_status(
         info = await client.cdc_reports.status()
 
         assert info == {
-            "level": "3",
-            "level2": None,
+            "level": "Low",
+            "level2": "None",
             "week_date": "2018-10-13",
             "name": "California",
             "fill": {
