@@ -54,7 +54,7 @@ class CdcReport:  # pylint: disable=too-few-public-methods
             if key == self._contained_by_id:
                 info = data[keys[idx + 1]]
 
-        return info
+        return adjust_status(info)
 
     async def status_by_state(self, state: str) -> dict:
         """Return the CDC status for the specified state."""
