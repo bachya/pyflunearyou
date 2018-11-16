@@ -28,8 +28,6 @@ pip install pyflunearyou
 However, running the test suite currently requires Python 3.6 or higher; tests
 run on Python 3.5 will fail.
 
-# API Key
-
 # Usage
 
 `pyflunearyou` starts within an
