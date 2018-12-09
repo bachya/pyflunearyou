@@ -1,9 +1,12 @@
 """Define endpoints related to CDC reports."""
 # pylint: disable=unused-import
+import logging
 from copy import deepcopy
 from typing import Callable, Coroutine, Dict  # noqa
 
 from aiocache import cached
+
+_LOGGER = logging.getLogger(__name__)
 
 STATUS_MAP = {
     1: 'No Data',
@@ -42,13 +45,18 @@ class CdcReport:  # pylint: disable=too-few-public-methods
 
     async def _dump(self) -> dict:
         """Dump the raw API results (cached)."""
-        return await self._request('get', 'map/cdc')
+        cdc_resp = await self._request('get', 'map/cdc')
+
+        _LOGGER.debug('CDC status response: %s', cdc_resp)
+
+        return cdc_resp
 
     async def status(self) -> dict:
         """Return the CDC status for the provided latitude/longitude."""
         info = {}  # type: Dict[str, str]
 
         data = await self.dump()
+
         keys = list(data.keys())
         for idx, key in enumerate(data.keys()):
             if key == self._contained_by_id:
