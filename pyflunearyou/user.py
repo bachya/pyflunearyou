@@ -1,9 +1,12 @@
 """Define endpoints related to user reports."""
+import logging
 from typing import Callable, Coroutine
 
 from aiocache import cached
 
 from .util import haversine
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class UserReport:  # pylint: disable=too-few-public-methods
@@ -21,7 +24,11 @@ class UserReport:  # pylint: disable=too-few-public-methods
 
     async def _dump(self) -> dict:
         """Dump the raw API results (cached)."""
-        return await self._request('get', 'map/markers')
+        user_resp = await self._request('get', 'map/markers')
+
+        _LOGGER.debug('CDC status response: %s', user_resp)
+
+        return user_resp
 
     async def status(self) -> dict:
         """Get symptom data for the location nearest to the user's lat/lon."""
