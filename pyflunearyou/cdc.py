@@ -7,7 +7,7 @@ from typing import Callable, Coroutine, Dict  # noqa
 from aiocache import cached
 
 from .report import Report
-from .util import haversine
+from .util import get_nearest_by_coordinates
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -44,16 +44,10 @@ class CdcReport(Report):
         """Initialize."""
         super().__init__(request, get_raw_data, cache_seconds)
         self.raw_cdc_data = cached(ttl=self._cache_seconds)(self._raw_cdc_data)
-        self.raw_state_data = cached(ttl=self._cache_seconds)(
-            self._raw_state_data)
 
     async def _raw_cdc_data(self) -> dict:
         """Return the raw CDC data."""
         return await self._get_raw_data('map/cdc')
-
-    async def _raw_state_data(self) -> dict:
-        """Return the raw state data."""
-        return await self._get_raw_data('states')
 
     async def status_by_coordinates(
             self, latitude: float, longitude: float) -> dict:
@@ -64,14 +58,8 @@ class CdcReport(Report):
             if location['name'] != 'United States'
         ]
 
-        closest = min(
-            state_data,
-            key=lambda p: haversine(
-                latitude,
-                longitude,
-                float(p['lat']),
-                float(p['lon'])
-            ))
+        closest = get_nearest_by_coordinates(
+            state_data, 'lat', 'lon', latitude, longitude)
 
         return adjust_status(cdc_data[closest['name']])
 
