@@ -6,6 +6,9 @@ from typing import Callable, Coroutine, Dict  # noqa
 
 from aiocache import cached
 
+from .report import Report
+from .util import haversine
+
 _LOGGER = logging.getLogger(__name__)
 
 STATUS_MAP = {
@@ -31,41 +34,54 @@ def adjust_status(info: dict) -> dict:
     return modified_info
 
 
-class CdcReport:  # pylint: disable=too-few-public-methods
+class CdcReport(Report):
     """Define a single class to handle these endpoints."""
 
     def __init__(
-            self, request: Callable[..., Coroutine], contained_by_id: str,
+            self, request: Callable[..., Coroutine],
+            get_raw_data: Callable[..., Coroutine],
             cache_seconds: int) -> None:
         """Initialize."""
-        self._contained_by_id = contained_by_id
-        self._request = request
+        super().__init__(request, get_raw_data, cache_seconds)
+        self.raw_cdc_data = cached(ttl=self._cache_seconds)(self._raw_cdc_data)
+        self.raw_state_data = cached(ttl=self._cache_seconds)(
+            self._raw_state_data)
 
-        self.dump = cached(ttl=cache_seconds)(self._dump)
+    async def _raw_cdc_data(self) -> dict:
+        """Return the raw CDC data."""
+        return await self._get_raw_data('map/cdc')
 
-    async def _dump(self) -> dict:
-        """Dump the raw API results (cached)."""
-        cdc_resp = await self._request('get', 'map/cdc')
+    async def _raw_state_data(self) -> dict:
+        """Return the raw state data."""
+        return await self._get_raw_data('states')
 
-        _LOGGER.debug('CDC status response: %s', cdc_resp)
-
-        return cdc_resp
-
-    async def status(self) -> dict:
+    async def status_by_coordinates(
+            self, latitude: float, longitude: float) -> dict:
         """Return the CDC status for the provided latitude/longitude."""
-        info = {}  # type: Dict[str, str]
+        cdc_data = await self.raw_cdc_data()
+        state_data = [
+            location for location in await self.raw_state_data()
+            if location['name'] != 'United States'
+        ]
 
-        data = await self.dump()
+        closest = min(
+            state_data,
+            key=lambda p: haversine(
+                latitude,
+                longitude,
+                float(p['lat']),
+                float(p['lon'])
+            ))
 
-        keys = list(data.keys())
-        for idx, key in enumerate(data.keys()):
-            if key == self._contained_by_id:
-                info = data[keys[idx + 1]]
-
-        return adjust_status(info)
+        return adjust_status(cdc_data[closest['name']])
 
     async def status_by_state(self, state: str) -> dict:
         """Return the CDC status for the specified state."""
-        data = await self.dump()
-        [info] = [v for k, v in data.items() if state in k]
+        data = await self.raw_cdc_data()
+
+        try:
+            info = next((v for k, v in data.items() if state in k))
+        except StopIteration:
+            return {}
+
         return adjust_status(info)

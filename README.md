@@ -38,8 +38,6 @@ import asyncio
 
 from aiohttp import ClientSession
 
-from pyflunearyou import Client
-
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
@@ -57,25 +55,25 @@ import asyncio
 
 from aiohttp import ClientSession
 
-from pyflunearyou import create_client
+from pyflunearyou import Client
 
 
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     async with ClientSession() as websession:
-      client = await create_client(<LATITUDE>, <LONGITUDE>, websession)
+      client = Client(websession)
 
-      # Get user data for the client's latitude/longitude:
-      await client.user_reports.status()
+      # Get user data for a specific latitude/longitude:
+      await client.user_reports.status_by_coordinates(<LATITUDE>, <LONGITUDE>)
 
-      # Get user data for the a specific ZIP code:
-      await client.user_reports.status_by_zip("90046")
+      # Get user data for a specific ZIP code:
+      await client.user_reports.status_by_zip("<ZIP_CODE>")
 
-      # Get CDC data for the client's latitude/longitude:
-      await client.cdc_reports.status()
+      # Get CDC data for a specific latitude/longitude:
+      await client.cdc_reports.status_by_coordinates(<LATITUDE>, <LONGITUDE>)
 
-      # Get CDC data for North Dakota
-      await client.cdc_reports.status_by_state('North Dakota')
+      # Get CDC data for a specific state:
+      await client.cdc_reports.status_by_state('<USA_CANADA_STATE_NAME>')
 
 asyncio.get_event_loop().run_until_complete(main())
 ```
