@@ -4,53 +4,48 @@ from typing import Callable, Coroutine
 
 from aiocache import cached
 
+from .report import Report
 from .util import haversine
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class UserReport:  # pylint: disable=too-few-public-methods
+class UserReport(Report):
     """Define a single class to handle these endpoints."""
 
     def __init__(
-            self, request: Callable[..., Coroutine], latitude: float,
-            longitude: float, cache_seconds: int) -> None:
+            self, request: Callable[..., Coroutine],
+            get_raw_data: Callable[..., Coroutine],
+            cache_seconds: int) -> None:
         """Initialize."""
-        self._request = request
-        self._latitude = latitude
-        self._longitude = longitude
+        super().__init__(request, get_raw_data, cache_seconds)
+        self.raw_data = cached(ttl=self._cache_seconds)(self._raw_user_data)
 
-        self.dump = cached(ttl=cache_seconds)(self._dump)
+    async def _raw_user_data(self) -> dict:
+        """Return the raw user data."""
+        return await self._get_raw_data('map/markers')
 
-    async def _dump(self) -> dict:
-        """Dump the raw API results (cached)."""
-        user_resp = await self._request('get', 'map/markers')
-
-        _LOGGER.debug('CDC status response: %s', user_resp)
-
-        return user_resp
-
-    async def status(self) -> dict:
+    async def status_by_coordinates(
+            self, latitude: float, longitude: float) -> dict:
         """Get symptom data for the location nearest to the user's lat/lon."""
         data = [
-            d for d in await self.dump() if d['latitude'] and d['longitude']
+            d for d in await self.raw_data()
+            if d['latitude'] and d['longitude']
         ]
         closest = min(
             data,
             key=lambda p: haversine(
-                self._latitude,
-                self._longitude,
+                latitude,
+                longitude,
                 float(p['latitude']),
                 float(p['longitude'])
             ))
         return closest
 
     async def status_by_zip(self, zip_code: str) -> dict:
-        """Get symptom data for the location nearest to the user's lat/lon."""
+        """Get symptom data for the provided ZIP code."""
         try:
-            [info] = [
-                d for d in await self.dump() if d['zip'] == zip_code
-            ]
+            [info] = [d for d in await self.raw_data() if d['zip'] == zip_code]
         except ValueError:
             return {}
 

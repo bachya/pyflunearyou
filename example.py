@@ -4,7 +4,7 @@ import logging
 
 from aiohttp import ClientSession
 
-from pyflunearyou import create_client
+from pyflunearyou import Client
 from pyflunearyou.errors import FluNearYouError
 
 _LOGGER = logging.getLogger()
@@ -16,10 +16,11 @@ async def main() -> None:
     async with ClientSession() as websession:
         try:
             # Create a client:
-            client = await create_client(36.0861973, -86.8781167, websession)
+            client = Client(websession)
 
             # Get user data for the client's latitude/longitude:
-            user_coord_resp = await client.user_reports.status()
+            user_coord_resp = await client.user_reports.status_by_coordinates(
+                47.6129432, -122.4821475)
             _LOGGER.info(
                 'User data by latitude/longitude: %s', user_coord_resp)
 
@@ -28,7 +29,8 @@ async def main() -> None:
             _LOGGER.info('User data by ZIP code: %s', user_zip_resp)
 
             # Get CDC data for the client's latitude/longitude:
-            cdc_coord_resp = await client.cdc_reports.status()
+            cdc_coord_resp = await client.cdc_reports.status_by_coordinates(
+                47.6129432, -122.4821475)
             _LOGGER.info('CDC data by latitude/longitude: %s', cdc_coord_resp)
 
             # Get CDC data for North Dakota
