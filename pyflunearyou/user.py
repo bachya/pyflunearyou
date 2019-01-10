@@ -5,7 +5,7 @@ from typing import Callable, Coroutine
 from aiocache import cached
 
 from .report import Report
-from .util import get_nearest_by_coordinates
+from .util.geo import get_nearest_by_coordinates
 
 _LOGGER = logging.getLogger(__name__)
 

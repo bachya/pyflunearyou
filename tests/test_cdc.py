@@ -29,7 +29,7 @@ async def test_status_by_coordinates_success(
             TEST_LATITUDE, TEST_LONGITUDE)
 
         assert info == {
-            "level": "Low",
+            "level": "High",
             "level2": "None",
             "week_date": "2018-10-13",
             "name": "California",
