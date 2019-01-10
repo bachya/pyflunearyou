@@ -7,7 +7,8 @@ from typing import Callable, Coroutine, Dict  # noqa
 from aiocache import cached
 
 from .report import Report
-from .util import get_nearest_by_coordinates
+from .util import get_nearest_by_numeric_key
+from .util.geo import get_nearest_by_coordinates
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,9 +27,10 @@ def adjust_status(info: dict) -> dict:
     modified_info = deepcopy(info)
     modified_info.update({
         'level':
-            STATUS_MAP[int(info['level'])],
+            get_nearest_by_numeric_key(STATUS_MAP, int(info['level'])),
         'level2':
-            STATUS_MAP[int(99 if info['level2'] is None else info['level2'])],
+            STATUS_MAP[99] if info['level2'] is None else
+            get_nearest_by_numeric_key(STATUS_MAP, int(info['level2']))
     })
 
     return modified_info

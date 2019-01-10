@@ -1,4 +1,4 @@
-"""Define various utility functions."""
+"""Define various geo utility functions."""
 from typing import Any
 
 from math import radians, cos, sin, asin, sqrt

@@ -10,7 +10,7 @@ def fixture_cdc_report_json():
             "place_id": "204"
         },
         "California": {
-            "level": "3",
+            "level": "6",
             "level2": None,
             "week_date": "2018-10-13",
             "name": "California",
