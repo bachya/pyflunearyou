@@ -16,7 +16,6 @@ twine = "*"
 
 [packages]
 aiocache = "*"
-aiodns = "*"
 aiohttp = "*"
 async-timeout = "*"
 ujson = "*"
