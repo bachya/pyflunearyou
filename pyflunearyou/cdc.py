@@ -7,8 +7,8 @@ from typing import Callable, Coroutine, Dict  # noqa
 from aiocache import cached
 
 from .report import Report
-from .util import get_nearest_by_numeric_key
-from .util.geo import get_nearest_by_coordinates
+from .helpers import get_nearest_by_numeric_key
+from .helpers.geo import get_nearest_by_coordinates
 
 _LOGGER = logging.getLogger(__name__)
 
