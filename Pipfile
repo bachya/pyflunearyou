@@ -5,10 +5,11 @@ verify_ssl = true
 [dev-packages]
 "flake8" = "*"
 aresponses = "*"
+astroid = "<2.2"
 detox = "*"
-mypy = "==0.660"
+mypy = "*"
 pydocstyle = "*"
-pylint = "<=2.3.0,>=2.2.0"
+pylint = "*"
 pytest-aiohttp = "*"
 pytest-cov = "*"
 tox = "*"
