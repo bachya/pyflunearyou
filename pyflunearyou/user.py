@@ -11,7 +11,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class UserReport(Report):
-    """Define a single class to handle these endpoints."""
+    """Define a user report object."""
 
     def __init__(
             self, request: Callable[..., Coroutine],

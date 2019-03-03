@@ -37,7 +37,7 @@ def adjust_status(info: dict) -> dict:
 
 
 class CdcReport(Report):
-    """Define a single class to handle these endpoints."""
+    """Define a CDC report object."""
 
     def __init__(
             self, request: Callable[..., Coroutine],
