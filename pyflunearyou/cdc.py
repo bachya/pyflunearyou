@@ -8,7 +8,6 @@ from aiocache import cached
 
 from .report import Report
 from .helpers import get_nearest_by_numeric_key
-from .helpers.geo import get_nearest_by_coordinates
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,29 +40,21 @@ class CdcReport(Report):
 
     def __init__(
             self, request: Callable[..., Coroutine],
-            get_raw_data: Callable[..., Coroutine],
             cache_seconds: int) -> None:
         """Initialize."""
-        super().__init__(request, get_raw_data, cache_seconds)
+        super().__init__(request, cache_seconds)
         self.raw_cdc_data = cached(ttl=self._cache_seconds)(self._raw_cdc_data)
 
     async def _raw_cdc_data(self) -> dict:
         """Return the raw CDC data."""
-        return await self._get_raw_data('map/cdc')
+        return await self._request('get', 'map/cdc')
 
     async def status_by_coordinates(
             self, latitude: float, longitude: float) -> dict:
         """Return the CDC status for the provided latitude/longitude."""
         cdc_data = await self.raw_cdc_data()
-        state_data = [
-            location for location in await self.raw_state_data()
-            if location['name'] != 'United States'
-        ]
-
-        closest = get_nearest_by_coordinates(
-            state_data, 'lat', 'lon', latitude, longitude)
-
-        return adjust_status(cdc_data[closest['name']])
+        nearest = await self.nearest_by_coordinates(latitude, longitude)
+        return adjust_status(cdc_data[nearest['state']['name']])
 
     async def status_by_state(self, state: str) -> dict:
         """Return the CDC status for the specified state."""

@@ -32,16 +32,8 @@ class Client:
         """Initialize."""
         self._cache_seconds = cache_seconds
         self._websession = websession
-        self.cdc_reports = CdcReport(
-            self._request, self._raw_data, cache_seconds)
-        self.user_reports = UserReport(
-            self._request, self._raw_data, cache_seconds)
-
-    async def _raw_data(self, endpoint: str) -> dict:
-        """Return raw data from an endpoint."""
-        resp = await self._request('get', endpoint)
-        _LOGGER.debug('Response for "%s": %s', endpoint, resp)
-        return resp
+        self.cdc_reports = CdcReport(self._request, cache_seconds)
+        self.user_reports = UserReport(self._request, cache_seconds)
 
     async def _request(
             self, method: str, endpoint: str, *, headers: dict = None) -> dict:
