@@ -6,7 +6,7 @@ verify_ssl = true
 "flake8" = "*"
 aresponses = "*"
 detox = "*"
-mypy = "*"
+mypy = "==0.660"
 pydocstyle = "*"
 pylint = "*"
 pytest-aiohttp = "*"
