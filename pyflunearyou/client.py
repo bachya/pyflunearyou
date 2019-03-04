@@ -1,7 +1,5 @@
 """Define a client to interact with Flu Near You."""
-# pylint: disable=unused-import
 import logging
-from typing import Union  # noqa
 
 from aiohttp import ClientSession, client_exceptions
 
@@ -12,16 +10,15 @@ from .user import UserReport
 
 _LOGGER = logging.getLogger(__name__)
 
-API_URL_SCAFFOLD = 'https://api.v2.flunearyou.org'
-
 DEFAULT_HOST = 'api.v2.flunearyou.org'
 DEFAULT_ORIGIN = 'https://flunearyou.org'
-DEFAULT_REFERER = 'https://flunearyou.org/'
+
+API_URL_SCAFFOLD = 'https://{0}'.format(DEFAULT_HOST)
+
 DEFAULT_USER_AGENT = 'Home Assistant (Macintosh; OS X/10.14.0) GCDHTTPRequest'
 
 
-# pylint: disable=too-few-public-methods,too-many-instance-attributes
-class Client:
+class Client:  # pylint: disable=too-few-public-methods
     """Define the client."""
 
     def __init__(
@@ -45,7 +42,7 @@ class Client:
         headers.update({
             'Host': DEFAULT_HOST,
             'Origin': DEFAULT_ORIGIN,
-            'Referer': DEFAULT_REFERER,
+            'Referer': DEFAULT_ORIGIN,
             'User-Agent': DEFAULT_USER_AGENT,
         })
 

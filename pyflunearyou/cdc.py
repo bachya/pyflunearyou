@@ -1,8 +1,7 @@
 """Define endpoints related to CDC reports."""
-# pylint: disable=unused-import
 import logging
 from copy import deepcopy
-from typing import Callable, Coroutine, Dict  # noqa
+from typing import Callable, Coroutine
 
 from aiocache import cached
 
