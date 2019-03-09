@@ -4,18 +4,17 @@ import logging
 from aiohttp import ClientSession, client_exceptions
 
 from .cdc import CdcReport
-from .const import DEFAULT_CACHE_SECONDS
 from .errors import RequestError
 from .user import UserReport
 
 _LOGGER = logging.getLogger(__name__)
 
+DEFAULT_CACHE_SECONDS = 60*60
 DEFAULT_HOST = 'api.v2.flunearyou.org'
 DEFAULT_ORIGIN = 'https://flunearyou.org'
+DEFAULT_USER_AGENT = 'Home Assistant (Macintosh; OS X/10.14.0) GCDHTTPRequest'
 
 API_URL_SCAFFOLD = 'https://{0}'.format(DEFAULT_HOST)
-
-DEFAULT_USER_AGENT = 'Home Assistant (Macintosh; OS X/10.14.0) GCDHTTPRequest'
 
 
 class Client:  # pylint: disable=too-few-public-methods
