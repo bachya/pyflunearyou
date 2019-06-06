@@ -7,24 +7,32 @@ import pytest
 from pyflunearyou import Client
 
 from .const import (
-    TEST_LATITUDE, TEST_LATITUDE_UNCONTAINED, TEST_LONGITUDE,
-    TEST_LONGITUDE_UNCONTAINED, TEST_ZIP)
+    TEST_LATITUDE,
+    TEST_LATITUDE_UNCONTAINED,
+    TEST_LONGITUDE,
+    TEST_LONGITUDE_UNCONTAINED,
+    TEST_ZIP,
+)
 from .fixtures.user import fixture_user_report_json
 
 
 @pytest.mark.asyncio
 async def test_status_by_coordinates_success_id(
-        aresponses, event_loop, fixture_user_report_json):
+    aresponses, event_loop, fixture_user_report_json
+):
     """Test getting user reports by latitude/longitude (contained ID)."""
     aresponses.add(
-        'api.v2.flunearyou.org', '/map/markers', 'get',
-        aresponses.Response(
-            text=json.dumps(fixture_user_report_json), status=200))
+        "api.v2.flunearyou.org",
+        "/map/markers",
+        "get",
+        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+    )
 
     async with aiohttp.ClientSession(loop=event_loop) as websession:
         client = Client(websession)
         info = await client.user_reports.status_by_coordinates(
-            TEST_LATITUDE, TEST_LONGITUDE)
+            TEST_LATITUDE, TEST_LONGITUDE
+        )
 
         assert info == {
             "local": {
@@ -41,7 +49,7 @@ async def test_status_by_coordinates_success_id(
                 "lepto": 0,
                 "dengue": 0,
                 "chick": 0,
-                "icon": "1"
+                "icon": "1",
             },
             "state": {
                 "name": "California",
@@ -63,7 +71,7 @@ async def test_status_by_coordinates_success_id(
                     "ili": 57,
                     "lepto": 0,
                     "dengue": 46,
-                    "chick": 0
+                    "chick": 0,
                 },
                 "last_week_data": {
                     "symptoms_percentage": 14.29,
@@ -80,25 +88,29 @@ async def test_status_by_coordinates_success_id(
                     "ili": 62,
                     "lepto": 1,
                     "dengue": 47,
-                    "chick": 0
-                }
-            }
+                    "chick": 0,
+                },
+            },
         }
 
 
 @pytest.mark.asyncio
 async def test_status_by_coordinates_success_measure(
-        aresponses, event_loop, fixture_user_report_json):
+    aresponses, event_loop, fixture_user_report_json
+):
     """Test getting user reports by latitude/longitude (measurement)."""
     aresponses.add(
-        'api.v2.flunearyou.org', '/map/markers', 'get',
-        aresponses.Response(
-            text=json.dumps(fixture_user_report_json), status=200))
+        "api.v2.flunearyou.org",
+        "/map/markers",
+        "get",
+        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+    )
 
     async with aiohttp.ClientSession(loop=event_loop) as websession:
         client = Client(websession)
         info = await client.user_reports.status_by_coordinates(
-            TEST_LATITUDE_UNCONTAINED, TEST_LONGITUDE_UNCONTAINED)
+            TEST_LATITUDE_UNCONTAINED, TEST_LONGITUDE_UNCONTAINED
+        )
 
         assert info == {
             "local": {
@@ -115,7 +127,7 @@ async def test_status_by_coordinates_success_measure(
                 "lepto": 0,
                 "dengue": 0,
                 "chick": 0,
-                "icon": "1"
+                "icon": "1",
             },
             "state": {
                 "name": "California",
@@ -137,7 +149,7 @@ async def test_status_by_coordinates_success_measure(
                     "ili": 57,
                     "lepto": 0,
                     "dengue": 46,
-                    "chick": 0
+                    "chick": 0,
                 },
                 "last_week_data": {
                     "symptoms_percentage": 14.29,
@@ -154,20 +166,21 @@ async def test_status_by_coordinates_success_measure(
                     "ili": 62,
                     "lepto": 1,
                     "dengue": 47,
-                    "chick": 0
-                }
-            }
+                    "chick": 0,
+                },
+            },
         }
 
 
 @pytest.mark.asyncio
-async def test_status_by_zip_success(
-        aresponses, event_loop, fixture_user_report_json):
+async def test_status_by_zip_success(aresponses, event_loop, fixture_user_report_json):
     """Test getting user reports by ZIP code."""
     aresponses.add(
-        'api.v2.flunearyou.org', '/map/markers', 'get',
-        aresponses.Response(
-            text=json.dumps(fixture_user_report_json), status=200))
+        "api.v2.flunearyou.org",
+        "/map/markers",
+        "get",
+        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+    )
 
     async with aiohttp.ClientSession(loop=event_loop) as websession:
         client = Client(websession)
@@ -188,7 +201,7 @@ async def test_status_by_zip_success(
                 "lepto": 0,
                 "dengue": 0,
                 "chick": 0,
-                "icon": "1"
+                "icon": "1",
             },
             "state": {
                 "name": "California",
@@ -210,7 +223,7 @@ async def test_status_by_zip_success(
                     "ili": 57,
                     "lepto": 0,
                     "dengue": 46,
-                    "chick": 0
+                    "chick": 0,
                 },
                 "last_week_data": {
                     "symptoms_percentage": 14.29,
@@ -227,23 +240,24 @@ async def test_status_by_zip_success(
                     "ili": 62,
                     "lepto": 1,
                     "dengue": 47,
-                    "chick": 0
-                }
-            }
+                    "chick": 0,
+                },
+            },
         }
 
 
 @pytest.mark.asyncio
-async def test_status_by_zip_failure(
-        aresponses, event_loop, fixture_user_report_json):
+async def test_status_by_zip_failure(aresponses, event_loop, fixture_user_report_json):
     """Test getting user reports by ZIP code."""
     aresponses.add(
-        'api.v2.flunearyou.org', '/map/markers', 'get',
-        aresponses.Response(
-            text=json.dumps(fixture_user_report_json), status=200))
+        "api.v2.flunearyou.org",
+        "/map/markers",
+        "get",
+        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+    )
 
     async with aiohttp.ClientSession(loop=event_loop) as websession:
         client = Client(websession)
-        info = await client.user_reports.status_by_zip('00000')
+        info = await client.user_reports.status_by_zip("00000")
 
         assert info == {}
