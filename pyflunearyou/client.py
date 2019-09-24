@@ -14,7 +14,7 @@ DEFAULT_HOST = "api.v2.flunearyou.org"
 DEFAULT_ORIGIN = "https://flunearyou.org"
 DEFAULT_USER_AGENT = "Home Assistant (Macintosh; OS X/10.14.0) GCDHTTPRequest"
 
-API_URL_SCAFFOLD = "https://{0}".format(DEFAULT_HOST)
+API_URL_SCAFFOLD = f"https://{DEFAULT_HOST}"
 
 
 class Client:  # pylint: disable=too-few-public-methods
@@ -32,9 +32,7 @@ class Client:  # pylint: disable=too-few-public-methods
     async def _request(
         self, method: str, endpoint: str, *, headers: dict = None
     ) -> dict:
-        """Make a request against air-matters.com."""
-        url = "{0}/{1}".format(API_URL_SCAFFOLD, endpoint)
-
+        """Make a request against Flu Near You."""
         if not headers:
             headers = {}
         headers.update(
@@ -46,11 +44,13 @@ class Client:  # pylint: disable=too-few-public-methods
             }
         )
 
-        async with self._websession.request(method, url, headers=headers) as resp:
+        async with self._websession.request(
+            method, f"{API_URL_SCAFFOLD}/{endpoint}", headers=headers
+        ) as resp:
             try:
                 resp.raise_for_status()
                 return await resp.json(content_type=None)
             except client_exceptions.ClientError as err:
                 raise RequestError(
-                    "Error requesting data from {0}: {1}".format(endpoint, err)
+                    f"Error requesting data from {endpoint}: {err}"
                 ) from None
