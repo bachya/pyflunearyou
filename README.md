@@ -23,6 +23,7 @@ pip install pyflunearyou
 
 * Python 3.6
 * Python 3.7
+* Python 3.8
 
 # Usage
 
