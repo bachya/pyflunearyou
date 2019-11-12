@@ -1,21 +1,21 @@
 clean:
-	pipenv --rm
+	. .venv/bin/activate; pre-commit uninstall
+	rm -rf .venv/
 coverage:
-	pipenv run py.test -s --verbose --cov-report term-missing --cov-report xml --cov=pyflunearyou tests
+	.venv/bin/py.test -s --verbose --cov-report term-missing --cov-report xml --cov=pyflunearyou tests
 init:
-	pip3 install --upgrade pip pipenv
-	pipenv lock
-	pipenv install --three --dev
-	pipenv run pre-commit install
+	virtualenv .venv
+	.venv/bin/pip3 install poetry
+	. .venv/bin/activate; poetry lock; poetry install; pre-commit install
 lint:
-	pipenv run flake8 pyflunearyou
-	pipenv run pydocstyle pyflunearyou
-	pipenv run pylint pyflunearyou
+	.venv/bin/flake8 pyflunearyou
+	.venv/bin/pydocstyle pyflunearyou
+	.venv/bin/pylint pyflunearyou
 publish:
-	pipenv run python setup.py sdist bdist_wheel
-	pipenv run twine upload dist/*
-	rm -rf dist/ build/ .egg pyflunearyou.egg-info/
+	.venv/bin/poetry build
+	.venv/bin/poetry publish
+	rm -rf dist/ build/ .egg *.egg-info/
 test:
-	pipenv run py.test
+	.venv/bin/py.test
 typing:
-	pipenv run mypy --ignore-missing-imports pyflunearyou
+	.venv/bin/mypy --ignore-missing-imports pyflunearyou

@@ -1,6 +1,2 @@
 [run]
 source = pyflunearyou
-
-omit =
-    pyflunearyou/__version__.py
-
