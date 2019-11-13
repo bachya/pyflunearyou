@@ -1,6 +1,6 @@
 # 🤒 pyflunearyou: A Python3 API for Flu Near You
 
-[![Travis CI](https://travis-ci.org/bachya/pyflunearyou.svg?branch=master)](https://travis-ci.org/bachya/pyflunearyou)
+[![CI](https://github.com/bachya/pyflunearyou/workflows/CI/badge.svg)](https://github.com/bachya/pyflunearyou/actions)
 [![PyPi](https://img.shields.io/pypi/v/pyflunearyou.svg)](https://pypi.python.org/pypi/pyflunearyou)
 [![Version](https://img.shields.io/pypi/pyversions/pyflunearyou.svg)](https://pypi.python.org/pypi/pyflunearyou)
 [![License](https://img.shields.io/pypi/l/pyflunearyou.svg)](https://github.com/bachya/pyflunearyou/blob/master/LICENSE)

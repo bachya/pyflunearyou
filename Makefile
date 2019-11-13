@@ -8,6 +8,7 @@ init:
 	.venv/bin/pip3 install poetry
 	. .venv/bin/activate; poetry lock; poetry install; pre-commit install
 lint:
+	.venv/bin/black --check --fast pyflunearyou
 	.venv/bin/flake8 pyflunearyou
 	.venv/bin/pydocstyle pyflunearyou
 	.venv/bin/pylint pyflunearyou
