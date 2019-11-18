@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyflunearyou"
-version = "1.0.4"
+version = "1.0.5"
 description = "A clean, well-tested Python3 API for Flu Near You"
 readme = "README.md"
 authors = ["Aaron Bach <bachya1208@gmail.com>"]
