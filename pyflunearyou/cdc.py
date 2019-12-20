@@ -1,12 +1,12 @@
 """Define endpoints related to CDC reports."""
-import logging
 from copy import deepcopy
+import logging
 from typing import Callable, Coroutine, Dict
 
 from aiocache import cached
 
-from .report import Report
 from .helpers import get_nearest_by_numeric_key
+from .report import Report
 
 _LOGGER = logging.getLogger(__name__)
 

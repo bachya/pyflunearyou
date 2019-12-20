@@ -1,7 +1,6 @@
 """Define various geo utility functions."""
+from math import asin, cos, radians, sin, sqrt
 from typing import Any
-
-from math import radians, cos, sin, asin, sqrt
 
 
 def get_nearest_by_coordinates(
