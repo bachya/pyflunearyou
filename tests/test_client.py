@@ -1,23 +1,21 @@
 """Define tests for the client object."""
-import json
-
 import aiohttp
 import pytest
 
 from pyflunearyou import Client
 from pyflunearyou.errors import RequestError
 
-from .fixtures.user import fixture_user_report_json
+from .common import load_fixture
 
 
 @pytest.mark.asyncio
-async def test_request_error(aresponses, event_loop, fixture_user_report_json):
+async def test_request_error(aresponses):
     """Test that a bad API endpoint raises the correct exception."""
     aresponses.add(
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
     )
     aresponses.add(
         "api.v2.flunearyou.org",
@@ -27,6 +25,6 @@ async def test_request_error(aresponses, event_loop, fixture_user_report_json):
     )
 
     with pytest.raises(RequestError):
-        async with aiohttp.ClientSession(loop=event_loop) as websession:
+        async with aiohttp.ClientSession() as websession:
             client = Client(websession)
             await client._request("get", "bad/endpoint")
