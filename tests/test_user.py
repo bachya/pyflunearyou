@@ -1,39 +1,34 @@
 """Define tests for the user report endpoints."""
-import json
-
 import aiohttp
 import pytest
 
 from pyflunearyou import Client
 
-from .const import (
+from .common import (
     TEST_LATITUDE,
     TEST_LATITUDE_UNCONTAINED,
     TEST_LONGITUDE,
     TEST_LONGITUDE_UNCONTAINED,
     TEST_ZIP,
+    load_fixture,
 )
-from .fixtures.user import fixture_user_report_json
 
 
 @pytest.mark.asyncio
-async def test_status_by_coordinates_success_id(
-    aresponses, event_loop, fixture_user_report_json
-):
+async def test_status_by_coordinates_success_id(aresponses):
     """Test getting user reports by latitude/longitude (contained ID)."""
     aresponses.add(
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
     )
 
-    async with aiohttp.ClientSession(loop=event_loop) as websession:
+    async with aiohttp.ClientSession() as websession:
         client = Client(websession)
         info = await client.user_reports.status_by_coordinates(
             TEST_LATITUDE, TEST_LONGITUDE
         )
-
         assert info == {
             "local": {
                 "id": 2,
@@ -95,23 +90,20 @@ async def test_status_by_coordinates_success_id(
 
 
 @pytest.mark.asyncio
-async def test_status_by_coordinates_success_measure(
-    aresponses, event_loop, fixture_user_report_json
-):
+async def test_status_by_coordinates_success_measure(aresponses):
     """Test getting user reports by latitude/longitude (measurement)."""
     aresponses.add(
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
     )
 
-    async with aiohttp.ClientSession(loop=event_loop) as websession:
+    async with aiohttp.ClientSession() as websession:
         client = Client(websession)
         info = await client.user_reports.status_by_coordinates(
             TEST_LATITUDE_UNCONTAINED, TEST_LONGITUDE_UNCONTAINED
         )
-
         assert info == {
             "local": {
                 "id": 3,
@@ -173,19 +165,18 @@ async def test_status_by_coordinates_success_measure(
 
 
 @pytest.mark.asyncio
-async def test_status_by_zip_success(aresponses, event_loop, fixture_user_report_json):
+async def test_status_by_zip_success(aresponses):
     """Test getting user reports by ZIP code."""
     aresponses.add(
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
     )
 
-    async with aiohttp.ClientSession(loop=event_loop) as websession:
+    async with aiohttp.ClientSession() as websession:
         client = Client(websession)
         info = await client.user_reports.status_by_zip(TEST_ZIP)
-
         assert info == {
             "local": {
                 "id": 2,
@@ -247,17 +238,16 @@ async def test_status_by_zip_success(aresponses, event_loop, fixture_user_report
 
 
 @pytest.mark.asyncio
-async def test_status_by_zip_failure(aresponses, event_loop, fixture_user_report_json):
+async def test_status_by_zip_failure(aresponses):
     """Test getting user reports by ZIP code."""
     aresponses.add(
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=json.dumps(fixture_user_report_json), status=200),
+        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
     )
 
-    async with aiohttp.ClientSession(loop=event_loop) as websession:
+    async with aiohttp.ClientSession() as websession:
         client = Client(websession)
         info = await client.user_reports.status_by_zip("00000")
-
         assert info == {}
