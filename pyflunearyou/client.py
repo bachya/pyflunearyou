@@ -40,7 +40,7 @@ class Client:  # pylint: disable=too-few-public-methods
             {
                 "Host": DEFAULT_HOST,
                 "Origin": DEFAULT_ORIGIN,
-                "Referer": DEFAULT_ORIGIN,
+                "Referrer": DEFAULT_ORIGIN,
                 "User-Agent": DEFAULT_USER_AGENT,
             }
         )
