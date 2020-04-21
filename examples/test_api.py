@@ -18,10 +18,10 @@ ZIP_CODE = "98110"
 async def main() -> None:
     """Create the aiohttp session and run the example."""
     logging.basicConfig(level=logging.INFO)
-    async with ClientSession() as websession:
+    async with ClientSession() as session:
         try:
             # Create a client:
-            client = Client(websession)
+            client = Client(session=session)
 
             # Get user data for the client's latitude/longitude:
             user_coord_resp = await client.user_reports.status_by_coordinates(
@@ -56,4 +56,4 @@ async def main() -> None:
             print(err)
 
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())

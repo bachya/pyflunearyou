@@ -11,6 +11,11 @@
 `pyflunearyou` is a simple Python library for retrieving UV-related information
 from [Flu Near You](https://flunearyou.org/#!/).
 
+- [Installation](#installation)
+- [Python Versions](#python-versions)
+- [Usage](#usage)
+- [Contributing](#contributing)
+
 # Installation
 
 ```python
@@ -27,25 +32,38 @@ pip install pyflunearyou
 
 # Usage
 
-`pyflunearyou` starts within an
-[aiohttp](https://aiohttp.readthedocs.io/en/stable/) `ClientSession`:
-
 ```python
 import asyncio
 
 from aiohttp import ClientSession
 
+from pyflunearyou import Client
+
 
 async def main() -> None:
-    """Create the aiohttp session and run the example."""
-    async with ClientSession() as websession:
-      # YOUR CODE HERE
+    """Run!"""
+    client = Client()
 
+    # Get user data for a specific latitude/longitude:
+    await client.user_reports.status_by_coordinates(<LATITUDE>, <LONGITUDE>)
 
-asyncio.get_event_loop().run_until_complete(main())
+    # Get user data for a specific ZIP code:
+    await client.user_reports.status_by_zip("<ZIP_CODE>")
+
+    # Get CDC data for a specific latitude/longitude:
+    await client.cdc_reports.status_by_coordinates(<LATITUDE>, <LONGITUDE>)
+
+    # Get CDC data for a specific state:
+    await client.cdc_reports.status_by_state('<USA_CANADA_STATE_NAME>')
+
+asyncio.run(main())
 ```
 
-Create a client and get to work:
+By default, the library creates a new connection to Flu Near You with each coroutine. If
+you are calling a large number of coroutines (or merely want to squeeze out every second
+of runtime savings possible), an
+[`aiohttp`](https://github.com/aio-libs/aiohttp) `ClientSession` can be used for connection
+pooling:
 
 ```python
 import asyncio
@@ -56,23 +74,13 @@ from pyflunearyou import Client
 
 
 async def main() -> None:
-    """Create the aiohttp session and run the example."""
-    async with ClientSession() as websession:
-      client = Client(websession)
+    """Run!"""
+    async with ClientSession() as session:
+        client = Client(session=session)
 
-      # Get user data for a specific latitude/longitude:
-      await client.user_reports.status_by_coordinates(<LATITUDE>, <LONGITUDE>)
+        # ...
 
-      # Get user data for a specific ZIP code:
-      await client.user_reports.status_by_zip("<ZIP_CODE>")
-
-      # Get CDC data for a specific latitude/longitude:
-      await client.cdc_reports.status_by_coordinates(<LATITUDE>, <LONGITUDE>)
-
-      # Get CDC data for a specific state:
-      await client.cdc_reports.status_by_state('<USA_CANADA_STATE_NAME>')
-
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
 ```
 
 # Contributing
@@ -81,7 +89,7 @@ asyncio.get_event_loop().run_until_complete(main())
   or [initiate a discussion on one](https://github.com/bachya/pyflunearyou/issues/new).
 2. [Fork the repository](https://github.com/bachya/pyflunearyou/fork).
 3. (_optional, but highly recommended_) Create a virtual environment: `python3 -m venv .venv`
-4. (_optional, but highly recommended_) Enter the virtual environment: `source ./venv/bin/activate`
+4. (_optional, but highly recommended_) Enter the virtual environment: `source ./.venv/bin/activate`
 5. Install the dev environment: `script/setup`
 6. Code your new feature or bug fix.
 7. Write tests that cover your new functionality.
