@@ -1,7 +1,7 @@
 """Define endpoints related to user reports."""
 import logging
 
-from .report import Report
+from .helpers.report import Report
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 

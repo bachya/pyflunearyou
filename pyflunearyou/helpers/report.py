@@ -4,9 +4,12 @@ from typing import Callable, Coroutine
 
 from aiocache import cached
 
-from .helpers.geo import get_nearest_by_coordinates
+from .geo import get_nearest_by_coordinates
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+CACHE_KEY_LOCAL_DATA = "local_data"
+CACHE_KEY_STATE_DATA = "state_data"
 
 
 class Report:  # pylint: disable=too-few-public-methods
@@ -18,10 +21,10 @@ class Report:  # pylint: disable=too-few-public-methods
         self._request: Callable[..., Coroutine] = request
 
         self.user_reports: Callable[..., Coroutine] = cached(
-            ttl=self._cache_seconds, key="local_data"
+            ttl=self._cache_seconds, key=CACHE_KEY_LOCAL_DATA
         )(self._raw_user_report_data)
         self.state_data: Callable[..., Coroutine] = cached(
-            ttl=self._cache_seconds, key="state_data"
+            ttl=self._cache_seconds, key=CACHE_KEY_STATE_DATA
         )(self._raw_state_data)
 
     async def _raw_user_report_data(self) -> list:
