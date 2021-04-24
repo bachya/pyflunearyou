@@ -30,10 +30,10 @@ class Client:  # pylint: disable=too-few-public-methods
         session: Optional[ClientSession] = None,
     ) -> None:
         """Initialize."""
-        self._cache_seconds: int = cache_seconds
+        self._cache_seconds = cache_seconds
         self._session: ClientSession = session
-        self.cdc_reports: CdcReport = CdcReport(self._request, cache_seconds)
-        self.user_reports: UserReport = UserReport(self._request, cache_seconds)
+        self.cdc_reports = CdcReport(self._request, cache_seconds)
+        self.user_reports = UserReport(self._request, cache_seconds)
 
     async def _request(
         self, method: str, endpoint: str, *, headers: Optional[dict] = None
