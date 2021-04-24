@@ -17,19 +17,19 @@ class Report:  # pylint: disable=too-few-public-methods
 
     def __init__(self, request: Callable[..., Coroutine], cache_seconds: int) -> None:
         """Initialize."""
-        self._cache_seconds: int = cache_seconds
-        self._request: Callable[..., Coroutine] = request
+        self._cache_seconds = cache_seconds
+        self._request = request
 
-        self.user_reports: Callable[..., Coroutine] = cached(
-            ttl=self._cache_seconds, key=CACHE_KEY_LOCAL_DATA
-        )(self._raw_user_report_data)
-        self.state_data: Callable[..., Coroutine] = cached(
-            ttl=self._cache_seconds, key=CACHE_KEY_STATE_DATA
-        )(self._raw_state_data)
+        self.user_reports = cached(ttl=self._cache_seconds, key=CACHE_KEY_LOCAL_DATA)(
+            self._raw_user_report_data
+        )
+        self.state_data = cached(ttl=self._cache_seconds, key=CACHE_KEY_STATE_DATA)(
+            self._raw_state_data
+        )
 
     async def _raw_user_report_data(self) -> list:
         """Return user report data (if accompanied by latitude/longitude)."""
-        data: dict = await self._request("get", "map/markers")
+        data = await self._request("get", "map/markers")
         return [
             location
             for location in data
@@ -38,7 +38,7 @@ class Report:  # pylint: disable=too-few-public-methods
 
     async def _raw_state_data(self) -> list:
         """Return a list of states."""
-        data: dict = await self._request("get", "states")
+        data = await self._request("get", "states")
         return [location for location in data if location["name"] != "United States"]
 
     async def nearest_by_coordinates(self, latitude: float, longitude: float) -> dict:
@@ -46,11 +46,9 @@ class Report:  # pylint: disable=too-few-public-methods
         # Since user data is more granular than state or CDC data, find the
         # user report whose coordinates are closest to the provided
         # coordinates:
-        nearest_user_report: dict = get_nearest_by_coordinates(
+        nearest_user_report = get_nearest_by_coordinates(
             await self.user_reports(), "latitude", "longitude", latitude, longitude
         )
-
-        nearest_state: str
 
         try:
             # If the user report corresponds to a known state in

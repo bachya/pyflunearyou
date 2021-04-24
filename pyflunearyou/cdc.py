@@ -22,7 +22,7 @@ STATUS_MAP: Dict[int, str] = {
 
 def adjust_status(info: dict) -> dict:
     """Apply status mapping to a raw API result."""
-    modified_info: dict = deepcopy(info)
+    modified_info = deepcopy(info)
     modified_info.update(
         {
             "level": get_nearest_by_numeric_key(STATUS_MAP, int(info["level"])),
@@ -51,16 +51,16 @@ class CdcReport(Report):
 
     async def status_by_coordinates(self, latitude: float, longitude: float) -> dict:
         """Return the CDC status for the provided latitude/longitude."""
-        cdc_data: dict = await self.raw_cdc_data()
-        nearest: dict = await self.nearest_by_coordinates(latitude, longitude)
+        cdc_data = await self.raw_cdc_data()
+        nearest = await self.nearest_by_coordinates(latitude, longitude)
         return adjust_status(cdc_data[nearest["state"]["name"]])
 
     async def status_by_state(self, state: str) -> dict:
         """Return the CDC status for the specified state."""
-        data: dict = await self.raw_cdc_data()
+        data = await self.raw_cdc_data()
 
         try:
-            info: dict = next((v for k, v in data.items() if state in k))
+            info = next((v for k, v in data.items() if state in k))
         except StopIteration:
             return {}
 
