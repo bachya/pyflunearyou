@@ -1,6 +1,6 @@
 """Define a generic report object."""
 import logging
-from typing import Callable, Coroutine
+from typing import Any, Callable, Coroutine, Dict, List
 
 from aiocache import cached
 
@@ -27,7 +27,7 @@ class Report:  # pylint: disable=too-few-public-methods
             self._raw_state_data
         )
 
-    async def _raw_user_report_data(self) -> list:
+    async def _raw_user_report_data(self) -> List[Dict[str, Any]]:
         """Return user report data (if accompanied by latitude/longitude)."""
         data = await self._request("get", "map/markers")
         return [
@@ -36,12 +36,14 @@ class Report:  # pylint: disable=too-few-public-methods
             if location["latitude"] and location["longitude"]
         ]
 
-    async def _raw_state_data(self) -> list:
+    async def _raw_state_data(self) -> List[Dict[str, Any]]:
         """Return a list of states."""
         data = await self._request("get", "states")
         return [location for location in data if location["name"] != "United States"]
 
-    async def nearest_by_coordinates(self, latitude: float, longitude: float) -> dict:
+    async def nearest_by_coordinates(
+        self, latitude: float, longitude: float
+    ) -> Dict[str, Any]:
         """Get the nearest report (with local and state info) to a lat/lon."""
         # Since user data is more granular than state or CDC data, find the
         # user report whose coordinates are closest to the provided

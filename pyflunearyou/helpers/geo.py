@@ -1,10 +1,10 @@
 """Define various geo utility functions."""
 from math import asin, cos, radians, sin, sqrt
-from typing import Any
+from typing import Any, Dict, List
 
 
 def get_nearest_by_coordinates(
-    data: list,
+    data: List[Dict[str, Any]],
     latitude_key: str,
     longitude_key: str,
     target_latitude: float,
