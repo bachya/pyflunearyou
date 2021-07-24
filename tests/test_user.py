@@ -27,13 +27,21 @@ async def test_no_explicit_client_session(aresponses):
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("user_report_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
     aresponses.add(
         "api.v2.flunearyou.org",
         "/states",
         "get",
-        aresponses.Response(text=load_fixture("states_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("states_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
 
     client = Client()
@@ -111,13 +119,21 @@ async def test_status_by_coordinates_success_id(aresponses):
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("user_report_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
     aresponses.add(
         "api.v2.flunearyou.org",
         "/states",
         "get",
-        aresponses.Response(text=load_fixture("states_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("states_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
 
     async with aiohttp.ClientSession() as session:
@@ -196,13 +212,21 @@ async def test_status_by_coordinates_success_measure(aresponses):
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("user_report_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
     aresponses.add(
         "api.v2.flunearyou.org",
         "/states",
         "get",
-        aresponses.Response(text=load_fixture("states_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("states_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
 
     async with aiohttp.ClientSession() as session:
@@ -281,13 +305,21 @@ async def test_status_by_zip_success(aresponses):
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("user_report_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
     aresponses.add(
         "api.v2.flunearyou.org",
         "/states",
         "get",
-        aresponses.Response(text=load_fixture("states_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("states_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
 
     async with aiohttp.ClientSession() as session:
@@ -364,13 +396,21 @@ async def test_status_by_zip_failure(aresponses):
         "api.v2.flunearyou.org",
         "/map/markers",
         "get",
-        aresponses.Response(text=load_fixture("user_report_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("user_report_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
     aresponses.add(
         "api.v2.flunearyou.org",
         "/states",
         "get",
-        aresponses.Response(text=load_fixture("states_response.json"), status=200),
+        aresponses.Response(
+            text=load_fixture("states_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
     )
 
     async with aiohttp.ClientSession() as session:

@@ -1,7 +1,7 @@
 """Define endpoints related to CDC reports."""
 from copy import deepcopy
 import logging
-from typing import Callable, Coroutine, Dict
+from typing import Any, Callable, Coroutine, Dict, cast
 
 from aiocache import cached
 
@@ -10,7 +10,7 @@ from .helpers.report import Report
 
 _LOGGER = logging.getLogger(__name__)
 
-STATUS_MAP: Dict[int, str] = {
+STATUS_MAP = {
     1: "No Data",
     2: "Minimal",
     3: "Low",
@@ -20,7 +20,7 @@ STATUS_MAP: Dict[int, str] = {
 }
 
 
-def adjust_status(info: dict) -> dict:
+def adjust_status(info: Dict[str, Any]) -> Dict[str, Any]:
     """Apply status mapping to a raw API result."""
     modified_info = deepcopy(info)
     modified_info.update(
@@ -41,21 +41,23 @@ class CdcReport(Report):
     def __init__(self, request: Callable[..., Coroutine], cache_seconds: int) -> None:
         """Initialize."""
         super().__init__(request, cache_seconds)
-        self.raw_cdc_data: Callable[..., Coroutine] = cached(ttl=self._cache_seconds)(
-            self._raw_cdc_data
-        )
 
-    async def _raw_cdc_data(self) -> dict:
+        self.raw_cdc_data = cached(ttl=self._cache_seconds)(self._raw_cdc_data)
+
+    async def _raw_cdc_data(self) -> Dict[str, Any]:
         """Return the raw CDC data."""
-        return await self._request("get", "map/cdc")
+        data = await self._request("get", "map/cdc")
+        return cast(Dict[str, Any], data)
 
-    async def status_by_coordinates(self, latitude: float, longitude: float) -> dict:
+    async def status_by_coordinates(
+        self, latitude: float, longitude: float
+    ) -> Dict[str, Any]:
         """Return the CDC status for the provided latitude/longitude."""
         cdc_data = await self.raw_cdc_data()
         nearest = await self.nearest_by_coordinates(latitude, longitude)
         return adjust_status(cdc_data[nearest["state"]["name"]])
 
-    async def status_by_state(self, state: str) -> dict:
+    async def status_by_state(self, state: str) -> Dict[str, Any]:
         """Return the CDC status for the specified state."""
         data = await self.raw_cdc_data()
 
