@@ -57,11 +57,9 @@ class Report:  # pylint: disable=too-few-public-methods
             # flunearyou.org's database, we can safely assume that's the
             # correct state:
             nearest_state = next(
-                (
-                    state
-                    for state in await self.state_data()
-                    if state["place_id"] == nearest_user_report["contained_by"]
-                )
+                state
+                for state in await self.state_data()
+                if state["place_id"] == nearest_user_report["contained_by"]
             )
         except StopIteration:
             # If a place ID doesn't exist (e.g., ZIP Code 98012 doesn't have a
