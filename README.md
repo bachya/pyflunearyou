@@ -10,6 +10,12 @@
 
 <a href="https://www.buymeacoffee.com/bachya1208P" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
+# DEPRECATION NOTICE
+
+This library has been replaced by [`pyoutbreaksnearme`](https://github.com/bachya/pyoutbreaksnearme).
+
+---
+
 `pyflunearyou` is a simple Python library for retrieving UV-related information
 from [Flu Near You](https://flunearyou.org/#!/).
 
